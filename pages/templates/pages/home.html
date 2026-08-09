@@ -1,0 +1,36 @@
+{% extends 'pages/base.html' %}
+{% block title %}Home | MySite{% endblock %}
+
+{% block content %}
+<div class="hero-section p-5 mb-5 text-center">
+    <h1 class="display-5 fw-bold">Welcome to MySite</h1>
+    <p class="fs-5">We build simple, reliable, and modern web experiences.</p>
+    <a href="{% url 'contact' %}" class="btn btn-light btn-lg mt-3 fw-semibold">
+        <i class="bi bi-envelope-paper me-2"></i>Get in Touch
+    </a>
+</div>
+
+<div class="row text-center g-4">
+    <div class="col-md-4">
+        <div class="card p-4 h-100">
+            <i class="bi bi-lightning-charge fs-1 mb-3"></i>
+            <h5>Fast & Reliable</h5>
+            <p class="text-muted mb-0">Built on a solid, scalable foundation for smooth performance.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card p-4 h-100">
+            <i class="bi bi-palette fs-1 mb-3"></i>
+            <h5>Clean Design</h5>
+            <p class="text-muted mb-0">A modern, responsive interface that works on every device.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card p-4 h-100">
+            <i class="bi bi-shield-check fs-1 mb-3"></i>
+            <h5>Secure & Organized</h5>
+            <p class="text-muted mb-0">Your information is handled safely and stored securely.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
