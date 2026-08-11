@@ -2,37 +2,43 @@
 {% block title %}Messages | MySite{% endblock %}
 
 {% block content %}
-<div class="text-center mb-5">
-    <h1 class="fw-bold mb-2">Contact Messages</h1>
-    <p class="text-muted fs-5">All messages submitted through the contact form.</p>
+
+<div class="page-header text-center reveal">
+    <div class="hero-glow" style="width:320px;height:320px;"></div>
+    <div class="hero-dots"></div>
+    <div class="position-relative">
+        <span class="eyebrow d-inline-block mb-3"><i class="bi bi-inbox me-1"></i> Inbox</span>
+        <h1 class="fw-bold mb-2">Contact Messages</h1>
+        <p class="mb-0" style="color:#d1d5db;">All messages submitted through the contact form.</p>
+    </div>
 </div>
 
-{% if all_messages %}
+{% if page_obj %}
 <div class="row text-center g-4 mb-5">
     <div class="col-md-4">
-        <div class="card p-4">
-            <i class="bi bi-inbox fs-2 mb-2"></i>
-            <h3 class="fw-bold mb-0">{{ all_messages|length }}</h3>
+        <div class="card feature-card p-4 reveal">
+            <div class="feature-icon"><i class="bi bi-inbox"></i></div>
+            <h3 class="counter fw-bold mb-0" data-target="{{ total_count }}">0</h3>
             <p class="text-muted mb-0">Total Messages</p>
         </div>
     </div>
     <div class="col-md-4">
-        <div class="card p-4">
-            <i class="bi bi-clock-history fs-2 mb-2"></i>
-            <h3 class="fw-bold mb-0">{{ all_messages.0.created_at|date:"M d" }}</h3>
+        <div class="card feature-card p-4 reveal" style="transition-delay:.06s">
+            <div class="feature-icon"><i class="bi bi-clock-history"></i></div>
+            <h3 class="fw-bold mb-0">{{ page_obj.object_list.0.created_at|date:"M d" }}</h3>
             <p class="text-muted mb-0">Latest Message</p>
         </div>
     </div>
     <div class="col-md-4">
-        <div class="card p-4">
-            <i class="bi bi-envelope-check fs-2 mb-2"></i>
+        <div class="card feature-card p-4 reveal" style="transition-delay:.12s">
+            <div class="feature-icon"><i class="bi bi-envelope-check"></i></div>
             <h3 class="fw-bold mb-0">100%</h3>
             <p class="text-muted mb-0">Delivered Successfully</p>
         </div>
     </div>
 </div>
 
-<div class="card p-4">
+<div class="card p-4 reveal">
 <div class="table-responsive">
 <table class="table table-striped table-hover table-bordered mb-0">
     <thead class="table-dark">
@@ -45,7 +51,7 @@
     </tr>
     </thead>
     <tbody>
-    {% for msg in all_messages %}
+    {% for msg in page_obj %}
     <tr>
         <td>{{ msg.name }}</td>
         <td>{{ msg.email }}</td>
@@ -59,10 +65,48 @@
 </div>
 </div>
 
+{% if page_obj.has_other_pages %}
+<nav class="mt-4">
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+        {% endif %}
+        <li class="page-item disabled"><span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span></li>
+        {% if page_obj.has_next %}
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+
 {% else %}
-<div class="card text-center py-5 text-muted">
-    <i class="bi bi-inbox fs-1 d-block mb-3"></i>
-    <p class="mb-0">No messages have been received yet.</p>
+<div class="highlight-panel text-center py-5 reveal">
+    <div class="icon-circle mx-auto"><i class="bi bi-inbox"></i></div>
+    <p class="mb-3">No messages have been received yet.</p>
+    <a href="{% url 'contact' %}" class="btn btn-glow"><i class="bi bi-send me-2"></i>Send the first message</a>
 </div>
 {% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.querySelectorAll('.reveal').forEach(el => {
+    new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-visible'); } });
+    }, { threshold: 0.15 }).observe(el);
+});
+document.querySelectorAll('.counter').forEach(el => {
+    new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                const target = parseInt(el.dataset.target, 10) || 0;
+                let cur = 0; const step = Math.max(1, Math.ceil(target/30));
+                const tick = () => { cur += step; if (cur >= target) { el.textContent = target; return; } el.textContent = cur; requestAnimationFrame(tick); };
+                tick();
+            }
+        });
+    }, { threshold: 0.5 }).observe(el);
+});
+</script>
 {% endblock %}

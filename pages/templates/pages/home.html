@@ -2,35 +2,119 @@
 {% block title %}Home | MySite{% endblock %}
 
 {% block content %}
-<div class="hero-section p-5 mb-5 text-center">
-    <h1 class="display-5 fw-bold">Welcome to MySite</h1>
-    <p class="fs-5">We build simple, reliable, and modern web experiences.</p>
-    <a href="{% url 'contact' %}" class="btn btn-light btn-lg mt-3 fw-semibold">
-        <i class="bi bi-envelope-paper me-2"></i>Get in Touch
-    </a>
+
+<!-- HERO -->
+<div class="hero-section p-5 mb-5 text-center position-relative overflow-hidden">
+    <div class="hero-glow"></div>
+    <div class="hero-dots"></div>
+    <div class="position-relative">
+        <span class="eyebrow d-inline-block mb-3">
+            <i class="bi bi-globe2 me-1"></i> Simple. Reliable. Modern.
+        </span>
+        <h1 class="display-5 fw-bold reveal">Welcome to MySite</h1>
+        <p class="fs-5 reveal" style="transition-delay:.08s">We build simple, reliable, and modern web experiences.</p>
+        <a href="{% url 'contact' %}" class="btn btn-glow btn-lg mt-3 fw-semibold reveal" style="transition-delay:.16s">
+            <i class="bi bi-envelope-paper me-2"></i>Get in Touch
+        </a>
+    </div>
 </div>
 
-<div class="row text-center g-4">
+<!-- STATS -->
+<div class="row text-center g-4 mb-5">
+    <div class="col-6 col-md-3">
+        <div class="stat-box reveal">
+            <h2 class="counter fw-bold mb-0" data-target="100">0</h2>
+            <p class="text-muted mb-0 small">% Uptime Focus</p>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="stat-box reveal" style="transition-delay:.05s">
+            <h2 class="counter fw-bold mb-0" data-target="24">0</h2>
+            <p class="text-muted mb-0 small">Hours Response</p>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="stat-box reveal" style="transition-delay:.1s">
+            <h2 class="counter fw-bold mb-0" data-target="3">0</h2>
+            <p class="text-muted mb-0 small">Core Pages</p>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="stat-box reveal" style="transition-delay:.15s">
+            <h2 class="counter fw-bold mb-0" data-target="1">0</h2>
+            <p class="text-muted mb-0 small">Mission: You</p>
+        </div>
+    </div>
+</div>
+
+<!-- FEATURE CARDS -->
+<div class="row text-center g-4 mb-5">
     <div class="col-md-4">
-        <div class="card p-4 h-100">
-            <i class="bi bi-lightning-charge fs-1 mb-3"></i>
+        <div class="card feature-card p-4 h-100 reveal">
+            <div class="feature-icon"><i class="bi bi-lightning-charge"></i></div>
             <h5>Fast & Reliable</h5>
             <p class="text-muted mb-0">Built on a solid, scalable foundation for smooth performance.</p>
         </div>
     </div>
     <div class="col-md-4">
-        <div class="card p-4 h-100">
-            <i class="bi bi-palette fs-1 mb-3"></i>
+        <div class="card feature-card p-4 h-100 reveal" style="transition-delay:.08s">
+            <div class="feature-icon"><i class="bi bi-palette"></i></div>
             <h5>Clean Design</h5>
             <p class="text-muted mb-0">A modern, responsive interface that works on every device.</p>
         </div>
     </div>
     <div class="col-md-4">
-        <div class="card p-4 h-100">
-            <i class="bi bi-shield-check fs-1 mb-3"></i>
+        <div class="card feature-card p-4 h-100 reveal" style="transition-delay:.16s">
+            <div class="feature-icon"><i class="bi bi-shield-check"></i></div>
             <h5>Secure & Organized</h5>
             <p class="text-muted mb-0">Your information is handled safely and stored securely.</p>
         </div>
     </div>
 </div>
+
+<!-- QUOTE STRIP -->
+<div class="quote-strip p-5 text-center reveal">
+    <i class="bi bi-quote fs-1 d-block mb-2"></i>
+    <p class="fs-5 fw-semibold mb-1">"Simple things, done well, beat complicated things done half-way."</p>
+    <p class="text-muted mb-0 small">— The MySite Philosophy</p>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Scroll-reveal
+const revealEls = document.querySelectorAll('.reveal');
+const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            revealObserver.unobserve(entry.target);
+        }
+    });
+}, { threshold: 0.15 });
+revealEls.forEach(el => revealObserver.observe(el));
+
+// Count-up numbers
+const counters = document.querySelectorAll('.counter');
+const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const el = entry.target;
+            const target = parseInt(el.dataset.target, 10);
+            let current = 0;
+            const step = Math.max(1, Math.ceil(target / 40));
+            const tick = () => {
+                current += step;
+                if (current >= target) { el.textContent = target; return; }
+                el.textContent = current;
+                requestAnimationFrame(tick);
+            };
+            tick();
+            counterObserver.unobserve(el);
+        }
+    });
+}, { threshold: 0.5 });
+counters.forEach(el => counterObserver.observe(el));
+</script>
 {% endblock %}

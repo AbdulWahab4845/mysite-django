@@ -2,20 +2,26 @@
 {% block title %}Contact Us | MySite{% endblock %}
 
 {% block content %}
-<div class="text-center mb-5">
-    <h1 class="fw-bold mb-2">Contact Us</h1>
-    <p class="text-muted fs-5">Have a question or want to say hello? We'd love to hear from you.</p>
+
+<div class="page-header text-center reveal">
+    <div class="hero-glow" style="width:320px;height:320px;"></div>
+    <div class="hero-dots"></div>
+    <div class="position-relative">
+        <span class="eyebrow d-inline-block mb-3"><i class="bi bi-envelope me-1"></i> Let's talk</span>
+        <h1 class="fw-bold mb-2">Contact Us</h1>
+        <p class="mb-0" style="color:#d1d5db;">Have a question or want to say hello? We'd love to hear from you.</p>
+    </div>
 </div>
 
 {% if messages %}
     {% for message in messages %}
-        <div class="alert alert-success text-center"><i class="bi bi-check-circle me-2"></i>{{ message }}</div>
+        <div class="alert alert-success text-center reveal"><i class="bi bi-check-circle me-2"></i>{{ message }}</div>
     {% endfor %}
 {% endif %}
 
 <div class="row g-4">
-    <div class="col-md-7">
-        <div class="card p-4">
+    <div class="col-md-7 reveal">
+        <div class="card form-card p-4">
             <form method="POST">
                 {% csrf_token %}
                 <div class="mb-3">
@@ -38,19 +44,19 @@
                     <input type="text" name="address" class="form-control" placeholder="City, area, or full address">
                 </div>
 
-                <button type="submit" class="btn btn-dark w-100">
+                <button type="submit" class="btn btn-glow w-100">
                     <i class="bi bi-send me-2"></i>Send Message
                 </button>
             </form>
         </div>
     </div>
 
-    <div class="col-md-5">
-        <div class="card p-4 h-100 bg-dark text-white">
+    <div class="col-md-5 reveal" style="transition-delay:.1s">
+        <div class="highlight-panel p-4 h-100">
             <h5 class="mb-4"><i class="bi bi-info-circle me-2"></i>Get in Touch</h5>
 
             <div class="d-flex align-items-start mb-4">
-                <i class="bi bi-clock fs-4 me-3"></i>
+                <div class="icon-chip"><i class="bi bi-clock"></i></div>
                 <div>
                     <h6 class="mb-1">Response Time</h6>
                     <p class="text-white-50 mb-0 small">We usually reply within 24 hours.</p>
@@ -58,7 +64,7 @@
             </div>
 
             <div class="d-flex align-items-start mb-4">
-                <i class="bi bi-shield-check fs-4 me-3"></i>
+                <div class="icon-chip"><i class="bi bi-shield-check"></i></div>
                 <div>
                     <h6 class="mb-1">Your Privacy</h6>
                     <p class="text-white-50 mb-0 small">Your information is kept safe and never shared.</p>
@@ -66,7 +72,7 @@
             </div>
 
             <div class="d-flex align-items-start">
-                <i class="bi bi-chat-dots fs-4 me-3"></i>
+                <div class="icon-chip"><i class="bi bi-chat-dots"></i></div>
                 <div>
                     <h6 class="mb-1">Any Question Welcome</h6>
                     <p class="text-white-50 mb-0 small">No question is too small — just reach out.</p>
@@ -75,4 +81,15 @@
         </div>
     </div>
 </div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.querySelectorAll('.reveal').forEach(el => {
+    new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-visible'); } });
+    }, { threshold: 0.15 }).observe(el);
+});
+</script>
 {% endblock %}
